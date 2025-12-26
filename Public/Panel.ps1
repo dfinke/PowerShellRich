@@ -6,8 +6,8 @@ function New-RichPanel {
         [string]$Title,
         [string]$Style = "white",
         [string]$BoxStyle = "rounded",
-        [int]$Width = $null,
-        [int]$Height = $null
+        $Width,
+        $Height
     )
 
     # Convert markup first so we can calculate visible length
