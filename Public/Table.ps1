@@ -3,6 +3,28 @@ function New-RichTable {
     <#
     .SYNOPSIS
         Creates a new Rich Table object.
+    .DESCRIPTION
+        Initializes a table object that can be customized with columns and rows, and then rendered to the console.
+    .PARAMETER Title
+        An optional title for the table.
+    .PARAMETER HeaderStyle
+        The style for the table header. Defaults to "bold magenta".
+    .PARAMETER BorderStyle
+        The style for the table borders. Defaults to "white".
+    .PARAMETER ShowHeader
+        Whether to display the header row. Defaults to $true.
+    .PARAMETER Border
+        The border style: "rounded", "simple", or "none". Defaults to "rounded".
+    .PARAMETER Columns
+        Legacy support: A list of column headers.
+    .PARAMETER Rows
+        Legacy support: A list of rows (arrays of values).
+    .EXAMPLE
+        $table = New-RichTable -Title "Process List"
+        New-RichTableColumn -Table $table -Header "Name"
+        New-RichTableColumn -Table $table -Header "ID"
+        Add-RichTableRow -Table $table -Values @("pwsh", 1234)
+        $table | Write-Rich
     #>
     param(
         [string]$Title,
@@ -44,6 +66,22 @@ function New-RichTable {
 }
 
 function New-RichTableColumn {
+    <#
+    .SYNOPSIS
+        Adds a column definition to a Rich Table.
+    .DESCRIPTION
+        Defines a column with header text, width, style, and justification.
+    .PARAMETER Table
+        The table object to add the column to.
+    .PARAMETER Header
+        The header text for the column.
+    .PARAMETER Width
+        An optional fixed width for the column.
+    .PARAMETER Style
+        The style for the column content.
+    .PARAMETER Justify
+        The text justification: "Left", "Right", or "Center". Defaults to "Left".
+    #>
     param(
         [Parameter(Mandatory = $true)]
         $Table,
@@ -66,6 +104,16 @@ function New-RichTableColumn {
 }
 
 function Add-RichTableRow {
+    <#
+    .SYNOPSIS
+        Adds a row of data to a Rich Table.
+    .DESCRIPTION
+        Appends a row of values to the specified table.
+    .PARAMETER Table
+        The table object to add the row to.
+    .PARAMETER Values
+        An array of values for the row.
+    #>
     param(
         [Parameter(Mandatory = $true)]
         $Table,
@@ -78,6 +126,14 @@ function Add-RichTableRow {
 }
 
 function Format-RichTable {
+    <#
+    .SYNOPSIS
+        Renders a Rich Table to a string.
+    .DESCRIPTION
+        Calculates column widths and renders the table with borders and styles into a single string.
+    .PARAMETER Table
+        The table object to render.
+    #>
     param(
         [Parameter(Mandatory = $true)]
         $Table

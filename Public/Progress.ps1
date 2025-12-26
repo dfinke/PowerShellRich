@@ -1,4 +1,18 @@
 function New-RichProgressBar {
+    <#
+    .SYNOPSIS
+        Creates a styled progress bar string.
+    .DESCRIPTION
+        Generates a string representing a progress bar based on a percentage.
+    .PARAMETER Percentage
+        The completion percentage (0-100).
+    .PARAMETER Width
+        The width of the progress bar in characters. Defaults to 40.
+    .PARAMETER CompletedStyle
+        The style for the completed portion of the bar. Defaults to "bold green".
+    .PARAMETER RemainingStyle
+        The style for the remaining portion of the bar. Defaults to "white".
+    #>
     param(
         [double]$Percentage,
         [int]$Width = 40,
@@ -20,6 +34,24 @@ function New-RichProgressBar {
 }
 
 function Start-RichProgress {
+    <#
+    .SYNOPSIS
+        Runs a script block with live progress bars.
+    .DESCRIPTION
+        Executes a script block and provides a background thread to render live progress bars for tasks added via Add-RichProgressTask.
+    .PARAMETER ScriptBlock
+        The script block to execute.
+    .PARAMETER RefreshRate
+        The refresh rate for the progress display in milliseconds. Defaults to 10.
+    .EXAMPLE
+        Start-RichProgress {
+            $id = Add-RichProgressTask -Description "Downloading" -Total 100
+            for ($i = 0; $i -le 100; $i += 10) {
+                Update-RichProgress -Id $id -Completed $i
+                Start-Sleep -Milliseconds 200
+            }
+        }
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -34,6 +66,18 @@ function Start-RichProgress {
     $script:RichProgressCounter = 0
 
     function global:Add-RichProgressTask {
+        <#
+        .SYNOPSIS
+            Adds a new task to the live progress display.
+        .DESCRIPTION
+            Creates a task with a description and total value, returning a task ID for updates.
+        .PARAMETER Description
+            The description of the task.
+        .PARAMETER Total
+            The total value representing 100% completion. Defaults to 100.
+        .PARAMETER Completed
+            The initial completed value. Defaults to 0.
+        #>
         param(
             [string]$Description,
             [double]$Total = 100,
@@ -50,6 +94,18 @@ function Start-RichProgress {
     }
 
     function global:Update-RichProgress {
+        <#
+        .SYNOPSIS
+            Updates the progress of a task.
+        .DESCRIPTION
+            Updates a task's completion status by either advancing the current value or setting it to a specific value.
+        .PARAMETER Id
+            The ID of the task to update.
+        .PARAMETER Advance
+            The amount to add to the current completed value.
+        .PARAMETER Completed
+            The new absolute completed value. If specified, Advance is ignored.
+        #>
         param(
             [int]$Id,
             [double]$Advance = 0,

@@ -1,4 +1,18 @@
 function New-RichLayout {
+    <#
+    .SYNOPSIS
+        Creates a new Rich Layout object.
+    .DESCRIPTION
+        Initializes a layout container that can be split into rows or columns to create complex console UIs.
+    .PARAMETER Name
+        The name of the layout region.
+    .PARAMETER Ratio
+        The relative size ratio of this region compared to its siblings.
+    .PARAMETER Size
+        An optional fixed size for the region.
+    .PARAMETER Content
+        The content to display in this region (text or other Rich objects).
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]
@@ -17,6 +31,7 @@ function New-RichLayout {
     $layout = [PSCustomObject]@{
         _Type     = "RichLayout"
         Name      = $Name
+        Title     = $Name
         Ratio     = $Ratio
         Size      = $Size
         Content   = $Content
@@ -28,6 +43,18 @@ function New-RichLayout {
 }
 
 function Split-RichLayout {
+    <#
+    .SYNOPSIS
+        Splits a layout region into multiple sub-regions.
+    .DESCRIPTION
+        Divides a layout region either vertically (into rows) or horizontally (into columns).
+    .PARAMETER Layout
+        The layout object to split.
+    .PARAMETER Direction
+        The direction of the split: "Vertical" (rows) or "Horizontal" (columns).
+    .PARAMETER Names
+        The names of the new sub-regions to create.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -49,6 +76,18 @@ function Split-RichLayout {
 }
 
 function Update-RichLayout {
+    <#
+    .SYNOPSIS
+        Updates the content of a named region in a layout.
+    .DESCRIPTION
+        Recursively searches for a region by name and updates its content.
+    .PARAMETER Layout
+        The root layout object.
+    .PARAMETER Name
+        The name of the region to update.
+    .PARAMETER Content
+        The new content for the region.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -57,17 +96,32 @@ function Update-RichLayout {
         [Parameter(Mandatory = $true)]
         [string]$Name,
         
-        [Parameter(Mandatory = $true)]
-        [PSObject]$Content
+        [Parameter(Mandatory = $false)]
+        [PSObject]$Content,
+
+        [Parameter(Mandatory = $false)]
+        [string]$Title
     )
 
     if ($Layout.Name -eq $Name) {
-        $Layout.Content = $Content
+        if ($PSBoundParameters.ContainsKey('Content')) {
+            $Layout.Content = $Content
+        }
+        if ($PSBoundParameters.ContainsKey('Title')) {
+            $Layout.Title = $Title
+        }
         return $true
     }
 
     foreach ($child in $Layout.Children) {
-        if (Update-RichLayout -Layout $child -Name $Name -Content $Content) {
+        $updateParams = @{
+            Layout = $child
+            Name   = $Name
+        }
+        if ($PSBoundParameters.ContainsKey('Content')) { $updateParams.Content = $Content }
+        if ($PSBoundParameters.ContainsKey('Title')) { $updateParams.Title = $Title }
+
+        if (Update-RichLayout @updateParams) {
             return $true
         }
     }
@@ -76,6 +130,18 @@ function Update-RichLayout {
 }
 
 function Format-RichLayout {
+    <#
+    .SYNOPSIS
+        Renders a layout to a list of strings.
+    .DESCRIPTION
+        Calculates the dimensions of all regions and renders them into a list of strings that can be printed to the console.
+    .PARAMETER Layout
+        The layout object to render.
+    .PARAMETER Width
+        The total width for rendering. Defaults to the console window width.
+    .PARAMETER Height
+        The total height for rendering. Defaults to 20.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -97,12 +163,12 @@ function Format-RichLayout {
     if ($Layout.Children.Count -eq 0) {
         # Leaf node: render content
         if ($null -ne $Layout.Content) {
-            $panel = New-RichPanel -Text $Layout.Content -Title $Layout.Name -Width $Width -Height $Height
+            $panel = New-RichPanel -Text $Layout.Content -Title $Layout.Title -Width $Width -Height $Height
             return $panel -split "`r?`n"
         }
         else {
             # Empty region with border
-            $panel = New-RichPanel -Text "" -Title $Layout.Name -Width $Width -Height $Height
+            $panel = New-RichPanel -Text "" -Title $Layout.Title -Width $Width -Height $Height
             return $panel -split "`r?`n"
         }
     }
@@ -117,7 +183,7 @@ function Format-RichLayout {
         $remainingHeight = $Height
         for ($i = 0; $i -lt $Layout.Children.Count; $i++) {
             $child = $Layout.Children[$i]
-            $childHeight = [int]($Height * ($child.Ratio / $totalRatio))
+            $childHeight = [int][Math]::Round($Height * ($child.Ratio / $totalRatio), [MidpointRounding]::AwayFromZero)
             if ($i -eq $Layout.Children.Count - 1) { $childHeight = $remainingHeight }
             $remainingHeight -= $childHeight
             
@@ -136,7 +202,7 @@ function Format-RichLayout {
         $remainingWidth = $Width
         for ($i = 0; $i -lt $Layout.Children.Count; $i++) {
             $child = $Layout.Children[$i]
-            $childWidth = [int]($Width * ($child.Ratio / $totalRatio))
+            $childWidth = [int][Math]::Round($Width * ($child.Ratio / $totalRatio), [MidpointRounding]::AwayFromZero)
             if ($i -eq $Layout.Children.Count - 1) { $childWidth = $remainingWidth }
             $remainingWidth -= $childWidth
             

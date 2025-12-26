@@ -26,6 +26,20 @@ $SPINNERS = @{
 }
 
 function New-RichSpinner {
+    <#
+    .SYNOPSIS
+        Creates a new Rich Spinner object.
+    .DESCRIPTION
+        Initializes a spinner configuration for use with status updates.
+    .PARAMETER Name
+        The name of the spinner type (e.g., "dots", "line", "moon"). Defaults to "dots".
+    .PARAMETER Text
+        The text to display alongside the spinner.
+    .PARAMETER Style
+        The style for the spinner (e.g., "cyan").
+    .PARAMETER Speed
+        The speed multiplier for the spinner animation.
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]
@@ -59,6 +73,24 @@ function New-RichSpinner {
 }
 
 function Start-RichStatus {
+    <#
+    .SYNOPSIS
+        Runs a script block with a live status spinner.
+    .DESCRIPTION
+        Executes a script block and displays a live animated spinner with status text in the console.
+    .PARAMETER Status
+        The status message to display.
+    .PARAMETER SpinnerName
+        The name of the spinner to use. Defaults to "dots".
+    .PARAMETER SpinnerStyle
+        The style for the spinner. Defaults to "bold cyan".
+    .PARAMETER ScriptBlock
+        The script block to execute while the spinner is active.
+    .EXAMPLE
+        Start-RichStatus -Status "Processing data..." -ScriptBlock {
+            Start-Sleep -Seconds 2
+        }
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

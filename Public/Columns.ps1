@@ -2,12 +2,16 @@ function New-RichColumns {
     <#
     .SYNOPSIS
         Arranges a list of items into columns.
+    .DESCRIPTION
+        Takes a list of strings (which can include Rich markup) and arranges them into a multi-column layout that fits within a specified width.
     .PARAMETER Items
-        The list of items to display.
+        The list of items to display. Supports pipeline input.
     .PARAMETER Width
-        The total width to use. Defaults to 80.
+        The total width to use for the columns. Defaults to 80.
     .PARAMETER Padding
-        The padding between columns. Defaults to 2.
+        The number of spaces between columns. Defaults to 2.
+    .EXAMPLE
+        "Item 1", "Item 2", "Item 3" | New-RichColumns -Width 40
     #>
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]

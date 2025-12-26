@@ -1,5 +1,15 @@
 
 function Convert-MarkdownTable {
+    <#
+    .SYNOPSIS
+        Converts a Markdown table string to a Rich Table object.
+    .DESCRIPTION
+        Parses a standard Markdown table (with headers and separator line) and returns a New-RichTable object.
+    .PARAMETER Markdown
+        The Markdown table string to convert. Supports pipeline input.
+    .EXAMPLE
+        "| Header 1 | Header 2 |`n| --- | --- |`n| Row 1 | Row 2 |" | Convert-MarkdownTable | Write-Rich
+    #>
     param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]$Markdown

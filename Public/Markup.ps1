@@ -1,5 +1,15 @@
 
 function Convert-RichMarkup {
+    <#
+    .SYNOPSIS
+        Converts Rich markup tags to ANSI escape sequences.
+    .DESCRIPTION
+        Processes strings containing tags like [bold red]text[/] and replaces them with the corresponding ANSI escape sequences for console display.
+    .PARAMETER InputString
+        The string containing Rich markup tags. Supports pipeline input.
+    .EXAMPLE
+        Convert-RichMarkup "[yellow]Warning:[/] [bold]System update required[/]"
+    #>
     param(
         [Parameter(ValueFromPipeline = $true, Position = 0)]
         [string]$InputString

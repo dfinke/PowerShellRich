@@ -1,5 +1,25 @@
 
 function New-RichPanel {
+    <#
+    .SYNOPSIS
+        Creates a styled panel with a border.
+    .DESCRIPTION
+        Wraps text in a box with optional title and styling. Supports Rich markup within the text.
+    .PARAMETER Text
+        The content to display inside the panel. Supports pipeline input.
+    .PARAMETER Title
+        An optional title to display in the top border of the panel.
+    .PARAMETER Style
+        The style for the panel border (e.g., "white", "bold blue").
+    .PARAMETER BoxStyle
+        The style of the box border. Currently supports "rounded".
+    .PARAMETER Width
+        The width of the panel. If not specified, it will be calculated based on the content.
+    .PARAMETER Height
+        The height of the panel. If not specified, it will be calculated based on the content.
+    .EXAMPLE
+        New-RichPanel -Text "Hello World" -Title "Greeting" -Style "green"
+    #>
     param(
         [Parameter(ValueFromPipeline = $true)]
         [string]$Text,

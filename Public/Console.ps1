@@ -1,5 +1,19 @@
 
 function Write-Rich {
+    <#
+    .SYNOPSIS
+        Writes formatted text to the console.
+    .DESCRIPTION
+        Writes text to the console with support for Rich markup and automatic formatting of Rich objects (Tables, Trees, Layouts).
+    .PARAMETER InputObject
+        The object or text to write. Supports pipeline input.
+    .PARAMETER Style
+        An optional style to apply to the entire output (e.g., "bold red").
+    .EXAMPLE
+        Write-Rich "[bold red]Hello[/] [green]World[/]"
+    .EXAMPLE
+        New-RichTable -Title "My Table" | Write-Rich
+    #>
     param(
         [Parameter(ValueFromPipeline)]
         $InputObject,

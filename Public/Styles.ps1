@@ -38,6 +38,14 @@ $ANSI_BG_COLORS = @{
 }
 
 function Get-AnsiCode {
+    <#
+    .SYNOPSIS
+        Converts a style string to an ANSI escape sequence.
+    .DESCRIPTION
+        Takes a space-separated style string (e.g., "bold red on white") and returns the corresponding ANSI escape sequence.
+    .PARAMETER Style
+        The style string to convert.
+    #>
     param(
         [string]$Style
     )
@@ -70,6 +78,16 @@ function Get-AnsiCode {
 }
 
 function Format-RichText {
+    <#
+    .SYNOPSIS
+        Applies a style to a string using ANSI escape sequences.
+    .DESCRIPTION
+        Wraps the provided text with ANSI escape sequences for the specified style and appends a reset sequence.
+    .PARAMETER Text
+        The text to style.
+    .PARAMETER Style
+        The style to apply (e.g., "bold green").
+    #>
     param(
         [string]$Text,
         [string]$Style
@@ -83,6 +101,14 @@ function Format-RichText {
 }
 
 function Get-VisibleLength {
+    <#
+    .SYNOPSIS
+        Calculates the visible length of a string, excluding ANSI escape sequences.
+    .DESCRIPTION
+        Removes ANSI escape sequences from a string and returns the length of the remaining plain text. This is useful for layout calculations.
+    .PARAMETER Text
+        The string to measure.
+    #>
     param(
         [string]$Text
     )
