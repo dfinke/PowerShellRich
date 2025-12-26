@@ -15,6 +15,7 @@ function New-RichLayout {
     )
 
     $layout = [PSCustomObject]@{
+        _Type     = "RichLayout"
         Name      = $Name
         Ratio     = $Ratio
         Size      = $Size
