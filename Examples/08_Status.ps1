@@ -1,4 +1,4 @@
-Import-Module ".\PowerShellRich.psd1" -Force
+Import-Module "$PSScriptRoot\..\PowerShellRich.psd1" -Force
 
 Write-Rich "[bold magenta]Status Spinner Demo[/]"
 
