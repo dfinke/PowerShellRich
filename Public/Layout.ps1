@@ -8,7 +8,7 @@ function New-RichLayout {
         [int]$Ratio = 1,
         
         [Parameter(Mandatory = $false)]
-        [int]$Size = $null,
+        $Size,
         
         [Parameter(Mandatory = $false)]
         [PSObject]$Content = $null
@@ -81,10 +81,10 @@ function Format-RichLayout {
         [PSObject]$Layout,
         
         [Parameter(Mandatory = $false)]
-        [int]$Width = $null,
+        $Width,
         
         [Parameter(Mandatory = $false)]
-        [int]$Height = $null
+        $Height
     )
 
     if ($null -eq $Width) { $Width = [Console]::WindowWidth }
@@ -98,7 +98,8 @@ function Format-RichLayout {
         if ($null -ne $Layout.Content) {
             $panel = New-RichPanel -Text $Layout.Content -Title $Layout.Name -Width $Width -Height $Height
             return $panel -split "`r?`n"
-        } else {
+        }
+        else {
             # Empty region with border
             $panel = New-RichPanel -Text "" -Title $Layout.Name -Width $Width -Height $Height
             return $panel -split "`r?`n"
@@ -123,7 +124,8 @@ function Format-RichLayout {
                 $lines += Format-RichLayout -Layout $child -Width $Width -Height $childHeight
             }
         }
-    } else {
+    }
+    else {
         # Columns
         $totalRatio = 0
         foreach ($child in $Layout.Children) { $totalRatio += $child.Ratio }
@@ -138,7 +140,7 @@ function Format-RichLayout {
             $remainingWidth -= $childWidth
             
             if ($childWidth -gt 0) {
-                $childLines += ,(Format-RichLayout -Layout $child -Width $childWidth -Height $Height)
+                $childLines += , (Format-RichLayout -Layout $child -Width $childWidth -Height $Height)
                 $childWidths += $childWidth
             }
         }
@@ -151,7 +153,8 @@ function Format-RichLayout {
                 $w = $childWidths[$i]
                 if ($y -lt $col.Count) {
                     $line += $col[$y]
-                } else {
+                }
+                else {
                     $line += " " * $w
                 }
             }
