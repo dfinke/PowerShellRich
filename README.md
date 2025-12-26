@@ -1,5 +1,5 @@
 <div align="center">
-<img src="PowerShellRich.png" alt="alt text" width="50%">
+<img src="media/PowerShellRich.png" alt="alt text" width="50%">
 </div>
 <br/>
 <br/>
@@ -36,11 +36,13 @@ PowerShell Rich is a module for rich text and beautiful formatting in the termin
 ```powershell
 Write-Rich "[bold magenta]Hello[/] [italic cyan]World![/]"
 ```
+![alt text](media/image.png)
 
 ### Panels
 ```powershell
 New-RichPanel -Text "This is a panel" -Title "My Title" -Style "green"
 ```
+![alt text](media/image-1.png)
 
 ### Tables
 ```powershell
@@ -50,6 +52,7 @@ $null = New-RichTableColumn -Table $table -Header "Year" -Justify "Right"
 $null = Add-RichTableRow -Table $table -Values "A New Hope", "1977"
 Format-RichTable -Table $table
 ```
+![alt text](media/image-2.png)
 
 ### Progress Bars
 ```powershell
@@ -73,6 +76,7 @@ $md = @"
 $table = Convert-MarkdownTable -Markdown $md
 Write-Rich $table
 ```
+![alt text](media/image-3.png)
 
 ## Examples
 
