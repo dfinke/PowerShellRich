@@ -21,8 +21,8 @@ function New-RichTable {
         Legacy support: A list of rows (arrays of values).
     .EXAMPLE
         $table = New-RichTable -Title "Process List"
-        New-RichTableColumn -Table $table -Header "Name"
-        New-RichTableColumn -Table $table -Header "ID"
+        $null = New-RichTableColumn -Table $table -Header "Name"
+        $null = New-RichTableColumn -Table $table -Header "ID"
         Add-RichTableRow -Table $table -Values @("pwsh", 1234)
         $table | Write-Rich
     #>
