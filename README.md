@@ -45,9 +45,9 @@ New-RichPanel -Text "This is a panel" -Title "My Title" -Style "green"
 ### Tables
 ```powershell
 $table = New-RichTable -Title "Movies"
-New-RichTableColumn -Table $table -Header "Title" -Style "bold cyan"
-New-RichTableColumn -Table $table -Header "Year" -Justify "Right"
-Add-RichTableRow -Table $table -Values "A New Hope", "1977"
+$null = New-RichTableColumn -Table $table -Header "Title" -Style "bold cyan"
+$null = New-RichTableColumn -Table $table -Header "Year" -Justify "Right"
+$null = Add-RichTableRow -Table $table -Values "A New Hope", "1977"
 Format-RichTable -Table $table
 ```
 
@@ -60,6 +60,18 @@ Start-RichProgress -ScriptBlock {
         Start-Sleep -Milliseconds 100
     }
 }
+```
+
+### Markdown Tables
+```powershell
+$md = @"
+| Feature | Status |
+|---------|--------|
+| Colors  | [green]Done[/] |
+| Tables  | [green]Done[/] |
+"@
+$table = Convert-MarkdownTable -Markdown $md
+Write-Rich $table
 ```
 
 ## Examples
